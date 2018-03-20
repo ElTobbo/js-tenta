@@ -5,23 +5,33 @@ let stuffContainer = document.getElementById("stuff");
 
 fetch('http://demo.edument.se/api/products')
     .then(response => response.json())
+    // .then(randomQty =>
+    //     let products = randomQty.map(function(el) {
+    //         var o = Object.assign({}, el);
+    //         o.Qty = Math.floor((Math.random() * 10) + 1);
+    //         return o;
+    //     )
+    //     console.log("Random: ", randomQty);
+    //return randomQty;
+//});
     .then(products => {
 
-        let shopStuff = products.map(data => `
+let shopStuff = products.map(data => `
     <div class="mapStuff" data-value="${data.Id}">
     <img src="${data.Image}"><br>
     <h3 class="detail">${data.Name}</h3>
     ${data.Description} <br>
     <a href="${data.Url}">${data.Url}</a><br>
     $ ${data.Price}  <br>
+    In stock: ${data.Qty}
     <button class="buy" data-value="${data.Id}">Add to cart</button>
      <hr>
      </div>
     `);
 
-    let shopStuffs = shopStuff.join(" ");    //Plockar bort kommatecken,
-    stuffContainer.innerHTML=shopStuffs;     //Publicering
-    //console.log(products);
+let shopStuffs = shopStuff.join(" ");    //Plockar bort kommatecken,
+stuffContainer.innerHTML=shopStuffs;     //Publicering
+//console.log(products);
 
 
 
@@ -196,8 +206,8 @@ function displayBasket() {
 
     let cost = Array.from(document.getElementsByClassName("itemCost"));
     let totalCost = cost.reduce(function(accumulator, node){
-       return accumulator+parseFloat(node.getAttribute("value"));
-     }, 0);
+        return accumulator+parseFloat(node.getAttribute("value"));
+    }, 0);
     console.log(totalCost);
     $("#itemCount").html(totalItems);
     $("#totalPrice").html("Total cost: " + totalCost);
@@ -212,4 +222,4 @@ function remove_from_cart(Id) {
 }
 
 /////Varje FETCH returnerar promise. Vänta in alla PROMISE, THEN alert och töm varukorg.
-    }); // then avslutas här...
+}); // then avslutas här...
