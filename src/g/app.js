@@ -81,6 +81,7 @@ let cartObject = {
 
 };
 
+
 /*
 document.getElementsByClassName("buy").addEventListener("click", bag);  //getElementsByClassName returnerar array. Duger inte här!
   //  buy(this.data('value'));
@@ -99,11 +100,11 @@ for ( var i = 0; i < buyButtons.length; i++ ) {
     });
 }
 
-function add_to_cart(id){
-    if (cartObject[id]){
-        cartObject[id]++;
+function add_to_cart(Id){
+    if (cartObject[Id]){
+        cartObject[Id]++;
     } else {
-        cartObject[id] = 1;
+        cartObject[Id] = 1;
     }
     //console.log("DATAVALUE", id, cartObject);
     displayBasket();
@@ -129,22 +130,31 @@ function displayBasket() {
         //let product = products.find(p => p.id == key);
         let product;
         for (let i = 0; i < products.length; i++) {
-            if (products[i].id == key) {
+            if (products[i].Id == key) {
                 product = products[i];
+                //console.log(product);
             }
         }
+
         if (qty) {
             basket.innerHTML += `                                                                                                             
-            <li><h5>${product.Name}</h5></li>                                                                                                                
-            <li>${product.price}:- </li>
-            <button class="decrease" data-value="${product.id}">-</button> 
+            ${product.Name}                                                                                                               
+            <button class="decrease" data-value="${product.Id}">-</button> 
             <input type="text" value="${cartObject[key]}" size="4" class="bagged">
-            <button class="increase" data-value="${product.id}">+</button>  
-            <li>${product.price * cartObject[key]}</li>
+            <button class="increase" data-value="${product.Id}">+</button>  
+            <input class="itemCost" type="number" style="display:none" value="${product.Price * cartObject[key]}"></input>
              <hr>                                                                             
         `;
         }
+        // totalSum.innerHTML = " ";
+        // let itemTotal = cartObject.map(function (cart)
+        // {
+        //     return cart.Price;
+        //     console.log(itemTotal);
+        // });
+
     }
+
 
 
     let minusBtns = document.getElementsByClassName("decrease");
@@ -183,12 +193,19 @@ function displayBasket() {
     }, 0);
     //console.log("Totalt antal", totalItems);
     //document.getElementById("itemCount").innerHTML = totalItems;
-    $("#itemCount").html(totalItems);
-}
-function remove_from_cart(id) {
 
-    if (cartObject[id]) {
-        cartObject[id]--;
+    let cost = Array.from(document.getElementsByClassName("itemCost"));
+    let totalCost = cost.reduce(function(accumulator, node){
+       return accumulator+parseFloat(node.getAttribute("value"));
+     }, 0);
+    console.log(totalCost);
+    $("#itemCount").html(totalItems);
+    $("#totalPrice").html("Total cost: " + totalCost);
+}
+function remove_from_cart(Id) {
+
+    if (cartObject[Id]) {
+        cartObject[Id]--;
     }
     displayBasket();
     //console.log("DATAVALUE", id, cartObject);
